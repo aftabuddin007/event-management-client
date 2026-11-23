@@ -19,7 +19,7 @@ const EventCard1 = ({ event }) => {
     startTime,
     endTime,
     imageUrl,
-    description,
+    
   } = event;
 
   const [loading, setLoading] = useState(false);
@@ -70,13 +70,13 @@ const EventCard1 = ({ event }) => {
 
       {/* Event Image */}
       <div className="relative h-52 w-full">
-        <Image
-          src={imageUrl}
-          alt={eventName}
-          fill
-          className="object-cover"
-          unoptimized
-        />
+<Image
+  src={imageUrl || "/default-event.jpg"}
+  alt={eventName || "Event image"}
+  fill
+  className="object-cover"
+  unoptimized
+/>
 
         <span className="absolute left-4 top-4 rounded-full bg-blue-600 px-4 py-1.5 text-xs font-semibold text-white">
           {category}
@@ -91,7 +91,7 @@ const EventCard1 = ({ event }) => {
             Organized by {organizer}
           </p>
 
-          <h2 className="mt-2 text-xl font-bold text-gray-900">
+                  <h2 className="mt-2 text-xl font-bold text-gray-900">
             {eventName}
           </h2>
 

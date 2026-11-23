@@ -1,7 +1,7 @@
 
-// import EventCard1 from "@/components/EventCard1";
 
 import EventCard1 from "@/components/Eventcard1";
+
 
 const MyEvent = async () => {
   const res = await fetch("http://localhost:5000/events", {
@@ -23,7 +23,7 @@ const MyEvent = async () => {
             <EventCard1
               key={event._id}
               event={{
-                event,
+                ...event,
                 _id: event._id.toString(),
               }}
             />

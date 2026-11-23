@@ -11,6 +11,8 @@ import {
   Lock,
   UserPlus,
 } from "lucide-react";
+import { authClient } from "@/lib/auth-client";
+import { redirect } from "next/navigation";
 
 export default function SignupPage() {
   const [formData, setFormData] = useState({
@@ -44,66 +46,76 @@ export default function SignupPage() {
     setSuccess("");
   };
 
-  const validateForm = () => {
-    const newErrors = {};
+ const validateForm = () => {
+  const newErrors = {};
 
-    // Name validation
-    if (!formData.name.trim()) {
-      newErrors.name = "Name is required";
-    } else if (formData.name.trim().length < 3) {
-      newErrors.name = "Name must be at least 3 characters";
+  // Name validation
+  if (!formData.name.trim()) {
+    newErrors.name = "Name is required";
+  } else if (formData.name.trim().length < 3) {
+    newErrors.name = "Name must be at least 3 characters";
+  }
+
+  // Email validation
+  if (!formData.email.trim()) {
+    newErrors.email = "Email is required";
+  } else if (
+    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
+  ) {
+    newErrors.email = "Please enter a valid email";
+  }
+
+  // Phone validation
+  if (!formData.phone.trim()) {
+    newErrors.phone = "Phone number is required";
+  } else if (!/^\+?[0-9]{10,15}$/.test(formData.phone.trim())) {
+    newErrors.phone = "Enter a valid phone number";
+  }
+
+  // Password validation
+  if (!formData.password) {
+    newErrors.password = "Password is required";
+  } else if (formData.password.length < 8) {
+    newErrors.password = "Password must be at least 8 characters";
+  } else if (
+    !/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.password)
+  ) {
+    newErrors.password =
+      "Use uppercase, lowercase and a number";
+  }
+
+  // Confirm password validation
+  if (!formData.confirmPassword) {
+    newErrors.confirmPassword = "Please confirm your password";
+  } else if (formData.password !== formData.confirmPassword) {
+    newErrors.confirmPassword = "Passwords do not match";
+  }
+
+  setErrors(newErrors);
+
+  return Object.keys(newErrors).length === 0;
+};
+
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  if (!validateForm()) return;
+
+  try {
+    const { data, error } = await authClient.signUp.email({
+      email: formData.email,
+      password: formData.password,
+      name: formData.name,
+    });
+
+    if (error) {
+      setErrors({
+        email: error.message || "Signup failed!",
+      });
+      return;
     }
 
-    // Email validation
-    if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
-    ) {
-      newErrors.email = "Please enter a valid email";
-    }
-
-    // Phone validation
-    if (!formData.phone.trim()) {
-      newErrors.phone = "Phone number is required";
-    } else if (!/^\+?[0-9]{10,15}$/.test(formData.phone.trim())) {
-      newErrors.phone = "Enter a valid phone number";
-    }
-
-    // Password validation
-    if (!formData.password) {
-      newErrors.password = "Password is required";
-    } else if (formData.password.length < 8) {
-      newErrors.password =
-        "Password must be at least 8 characters";
-    } else if (
-      !/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.password)
-    ) {
-      newErrors.password =
-        "Use uppercase, lowercase and a number";
-    }
-
-    // Confirm password validation
-    if (!formData.confirmPassword) {
-      newErrors.confirmPassword =
-        "Please confirm your password";
-    } else if (
-      formData.password !== formData.confirmPassword
-    ) {
-      newErrors.confirmPassword = "Passwords do not match";
-    }
-
-    setErrors(newErrors);
-
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (!validateForm()) return;
-
-    console.log("Signup Data:", formData);
+    console.log(data);
 
     setSuccess("Account created successfully!");
 
@@ -114,7 +126,17 @@ export default function SignupPage() {
       password: "",
       confirmPassword: "",
     });
-  };
+    if(data){
+      redirect("/login")  
+    }
+
+  } catch (error) {
+    console.error("Signup error:", error);
+    setErrors({
+      email: "Something went wrong. Please try again.",
+    });
+  }
+};
 
   const inputClass = (field) =>
     `w-full rounded-xl border bg-white py-3 pl-11 pr-4 text-sm text-gray-800 outline-none transition
