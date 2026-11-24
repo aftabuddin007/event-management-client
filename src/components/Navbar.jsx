@@ -47,6 +47,9 @@ export default function Navbar() {
                 My Events
               </Link></>
               }
+              <Link href="/blog" className="text-gray-700 hover:text-blue-600 transition-colors duration-300 font-medium">
+                Blog
+              </Link>
               <Link href="/contact" className="text-gray-700 hover:text-blue-600 transition-colors duration-300 font-medium">
                 Contact
               </Link>
@@ -110,6 +113,9 @@ export default function Navbar() {
           </Link>
             </>
           }
+          <Link href="/blog" onClick={toggleMenu} className="block text-gray-700 hover:text-blue-600 hover:bg-gray-50 px-3 py-2 rounded-md text-base font-medium">
+            Blog
+          </Link>
           <Link href="/contact" onClick={toggleMenu} className="block text-gray-700 hover:text-blue-600 hover:bg-gray-50 px-3 py-2 rounded-md text-base font-medium">
             Contact
           </Link>
