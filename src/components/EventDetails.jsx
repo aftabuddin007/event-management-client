@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
+import BookingCard from './BookingCard';
 
 const EventDetails = ({ event }) => {
     if (!event) return <p>Event not found!</p>;
@@ -122,18 +123,20 @@ const EventDetails = ({ event }) => {
 
                     {/* Booking Button */}
                     <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-                        <div>
+                        <div className='flex justify-between'>
                             <p className="text-sm text-base-content/60">
                                 Ticket Price
                             </p>
                             <p className="text-3xl font-bold text-primary">
                                 ৳{ticketPrice}
                             </p>
+                            <div className="">
+
+                                
+                             <BookingCard event={event}></BookingCard>
+                            </div>
                         </div>
 
-                        <button className="btn btn-primary p-2 rounded-xl bg-blue-600 btn-lg w-full sm:w-auto">
-                            Book Your Ticket
-                        </button>
                     </div>
 
                 </div>

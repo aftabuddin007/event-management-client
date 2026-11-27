@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { authClient } from '@/lib/auth-client';
 import { Button } from '@heroui/react';
 import { UserProfile } from './UserProfile';
+import { ShoppingBag } from 'lucide-react';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -55,7 +56,7 @@ export default function Navbar() {
               </Link>
               
               {/* Call to Action Button */}
-             
+             <button ><ShoppingBag /></button>
              { user? 
              <>
              <UserProfile></UserProfile>
@@ -119,6 +120,7 @@ export default function Navbar() {
           <Link href="/contact" onClick={toggleMenu} className="block text-gray-700 hover:text-blue-600 hover:bg-gray-50 px-3 py-2 rounded-md text-base font-medium">
             Contact
           </Link>
+<button><ShoppingBag /></button>
           {
             user ? <>
             <UserProfile></UserProfile>
